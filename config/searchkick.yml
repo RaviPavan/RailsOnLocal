@@ -1,0 +1,39 @@
+development:
+  post:
+    number_of_shards: 1
+    number_of_replicas: 1
+
+staging:
+  post:
+    number_of_shards: 1
+    number_of_replicas: 1
+
+production:
+  post:
+    number_of_shards: 1
+    number_of_replicas: 1
+    merge_mappings: true
+    settings: 
+      index: 
+        analysis: 
+          filter:                    
+            synonym_filter_keyword_updateable:
+              type: "synonym"
+              synonyms_path: "analysis/synonyms.txt"
+              updateable: "true"
+          analyzer:                   
+            synonym_analyzer_keyword_updateable: 
+              tokenizer: "keyword"
+              filter: ["lowercase", "synonym_filter_keyword_updateable"]                    
+            synonym_analyzer_keyword: 
+              tokenizer: "keyword"
+              filter: ["lowercase"]  
+    mappings: 
+        properties: 
+          title: 
+            type: "text"
+            analyzer: "synonym_analyzer_keyword"
+            search_analyzer: "synonym_analyzer_keyword_updateable"
+         
+            
+    
